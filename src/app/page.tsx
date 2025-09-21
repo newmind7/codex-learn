@@ -1,11 +1,16 @@
 ﻿"use client";
 
 import Link from "next/link";
+import dynamicImport from "next/dynamic";
 import "@xyflow/react/dist/style.css";
 import { ArrowUpRight } from "lucide-react";
 
-import MindMapCanvas from "@/components/mindmap-canvas";
 import MindMapSidebar from "@/components/mindmap-sidebar";
+import MindMapTimeline from "@/components/mindmap-timeline";
+
+const MindMapCanvas = dynamicImport(() => import("@/components/mindmap-canvas"), { ssr: false });
+
+export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
@@ -20,7 +25,7 @@ export default function Home() {
               构建你的下一张思维导图
             </h1>
             <p className="text-base leading-7 text-slate-300">
-              通过拖拽节点、快速添加子项和即时视觉反馈，MindWave 让创意组织变得生动高效。你可以从核心主题出发，自由拓展想法网络。
+              通过拖拽节点、时间轴和分组管理，MindWave 让创意组织变得生动高效。你可以从核心主题出发，自由拓展想法网络，并在不同日期的白板之间快速切换。
             </p>
           </div>
           <Link
@@ -32,6 +37,8 @@ export default function Home() {
           </Link>
         </header>
 
+        <MindMapTimeline />
+
         <main className="grid flex-1 grid-cols-1 gap-6 lg:grid-cols-[360px_1fr] xl:grid-cols-[400px_1fr]">
           <MindMapSidebar />
           <div className="relative min-h-[560px] overflow-hidden rounded-3xl bg-slate-950/50 p-1 shadow-2xl shadow-slate-950/40 ring-1 ring-slate-700/70">
@@ -40,10 +47,11 @@ export default function Home() {
         </main>
 
         <footer className="flex flex-col items-start gap-3 border-t border-slate-800 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>基于 Next.js 15、React 19、Tailwind CSS 4 与 React Flow 构建。</p>
-          <p>准备就绪后运行 `npm run dev` 开始调试。</p>
+          <p>基于 Next.js 15、React 19、Tailwind CSS 4 与 React Flow 构建，并支持本地持久化。</p>
+          <p>双击空白区域添加节点 · Tab 键创建子节点 · 勾选完成高亮节点。</p>
         </footer>
       </div>
     </div>
   );
 }
+
